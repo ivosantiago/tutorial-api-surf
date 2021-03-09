@@ -11,6 +11,7 @@
     "lint:fix": "eslint ./src ./test --ext .ts --fix",
     "test:unit": "jest",
     "test:functional": "jest --projects ./test --runInBand",
+    "test": "yarn test:unit && yarn test:functional",
     "style:check": "prettier --check 'src/**/*.ts' 'test/**/*.ts'",
     "style:fix": "prettier --write 'src/**/*.ts' 'test/**/*.ts'"
   },
@@ -35,7 +36,7 @@
     "@types/express": "^4.17.11",
     "@types/jest": "^26.0.20",
     "@types/module-alias": "^2.0.0",
-    "@types/mongoose": "^5.10.3",
+    "@types/mongoose": "5.10.3",
     "@types/nock": "^11.1.0",
     "@types/node": "^14.14.31",
     "@types/supertest": "^2.0.10",
@@ -57,6 +58,6 @@
     "config": "^3.3.4",
     "express": "^4.17.1",
     "module-alias": "^2.2.2",
-    "mongoose": "^5.11.19"
+    "mongoose": "5.10.3"
   }
 }
