@@ -4,6 +4,10 @@
         "database": {
             "mongoUrl": "mongodb+srv://ivosantiago:ivosantiag00@cluster0.oe6zi.mongodb.net/surf-forecast?retryWrites=true&w=majority"
         },
+        "auth": {
+            "key": "some-key",
+            "tokenExpiresIn": "2000000"
+        },
         "resources": {
             "StormGlass": {
                 "apiUrl": "https://api.stormglass.io/v2",
