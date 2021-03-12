@@ -33,7 +33,8 @@ describe('AuthMiddleware', () => {
     expect(resFake.status).toHaveBeenCalledWith(401);
     expect(sendMock).toHaveBeenCalledWith({
       code: 401,
-      error: 'jwt malformed',
+      error: 'Unauthorized',
+      message: 'jwt malformed',
     });
   });
 
@@ -53,7 +54,8 @@ describe('AuthMiddleware', () => {
     expect(resFake.status).toHaveBeenCalledWith(401);
     expect(sendMock).toHaveBeenCalledWith({
       code: 401,
-      error: 'jwt must be provided',
+      error: 'Unauthorized',
+      message: 'jwt must be provided',
     });
   });
 });

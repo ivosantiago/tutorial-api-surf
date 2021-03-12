@@ -1,4 +1,5 @@
 import AuthService from '@src/services/auth';
+import ApiError from '@src/util/errors/api-error';
 import { NextFunction, Request, Response } from 'express';
 
 export function authMiddleware(
@@ -12,6 +13,8 @@ export function authMiddleware(
     req.decoded = decoded;
     next();
   } catch (error) {
-    res.status?.(401).send({ code: 401, error: error.message });
+    res
+      .status?.(401)
+      .send(ApiError.format({ code: 401, message: error.message }));
   }
 }
