@@ -40,6 +40,7 @@ describe('Beach forecast functional tests', () => {
         lat: '-33.792726',
         lng: '151.289824',
         params: /(.*)/,
+        end: /(.*)/,
         source: 'noaa',
       })
       .reply(200, stormGlassWeather3HoursFixture);
