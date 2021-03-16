@@ -68,7 +68,7 @@ describe('Users functional test', () => {
         email: 'john@mail.com',
         password: '1234',
       };
-      await new User(newUser).save();
+      const user = await new User(newUser).save();
       const response = await global.testRequest
         .post('/users/authenticate')
         .send({ email: newUser.email, password: newUser.password });
@@ -76,6 +76,9 @@ describe('Users functional test', () => {
       expect(response.body).toEqual(
         expect.objectContaining({ token: expect.any(String) })
       );
+
+      const JwtClaims = AuthService.decodeToken(response.body.token);
+      expect(JwtClaims).toMatchObject({ sub: user.id });
     });
 
     it('Should return UNAUTHORIZED if the user with the given email is not found', async () => {
@@ -109,7 +112,7 @@ describe('Users functional test', () => {
         password: '1234',
       };
       const user = await new User(newUser).save();
-      const token = AuthService.generateToken(user.toJSON());
+      const token = AuthService.generateToken(user.id);
       const { body, status } = await global.testRequest
         .get('/users/me')
         .set({ 'x-access-token': token });
@@ -119,14 +122,7 @@ describe('Users functional test', () => {
     });
 
     it(`Should return Not Found, when the user is not found`, async () => {
-      const newUser = {
-        name: 'John Doe',
-        email: 'john@mail.com',
-        password: '1234',
-      };
-      //create a new user but don't save it
-      const user = new User(newUser);
-      const token = AuthService.generateToken(user.toJSON());
+      const token = AuthService.generateToken('fake-user-id');
       const { body, status } = await global.testRequest
         .get('/users/me')
         .set({ 'x-access-token': token });
