@@ -1,5 +1,4 @@
 import httpStatusCodes from 'http-status-codes';
-import { format } from 'prettier';
 
 export interface APIError {
   message: string;

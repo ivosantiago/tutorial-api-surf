@@ -2,6 +2,7 @@ import './util/module-alias';
 import { Server } from '@overnightjs/core';
 import bodyParser from 'body-parser';
 import { Application } from 'express';
+import * as http from 'http';
 import { ForecastController } from './controllers/forecast';
 import * as database from '@src/database';
 import { BeachesController } from './controllers/beaches';
@@ -14,8 +15,11 @@ import apiSchema from './api.schema.json';
 import swaggerUi from 'swagger-ui-express';
 import { OpenApiValidator } from 'express-openapi-validator';
 import { OpenAPIV3 } from 'express-openapi-validator/dist/framework/types';
+import { apiErrorValidator } from './middlewares/api-error-validator';
 
 export class SetupServer extends Server {
+  private server?: http.Server;
+
   constructor(private port = 3000) {
     super();
   }
@@ -25,6 +29,7 @@ export class SetupServer extends Server {
     await this.docsSetup();
     this.setupControllers();
     await this.databaseSetup();
+    this.setupErrorHandlers();
   }
 
   public getApp(): Application {
@@ -33,6 +38,17 @@ export class SetupServer extends Server {
 
   public async close(): Promise<void> {
     await database.close();
+
+    if (this.server) {
+      await new Promise<void>((resolve, reject) => {
+        this.server?.close((err) => {
+          if (err) {
+            return reject(err);
+          }
+          resolve();
+        });
+      });
+    }
   }
 
   public start(): void {
@@ -47,6 +63,10 @@ export class SetupServer extends Server {
       this.app.use(expressPino(logger));
     }
     this.app.use(cors({ origin: '*' }));
+  }
+
+  private setupErrorHandlers(): void {
+    this.app.use(apiErrorValidator);
   }
 
   private setupControllers(): void {
