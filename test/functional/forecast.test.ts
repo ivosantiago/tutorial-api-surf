@@ -4,6 +4,7 @@ import apiForecastResponse1BeachFixture from '../fixtures/api_forecast_response_
 import nock from 'nock';
 import { User } from '@src/models/user';
 import AuthService from '@src/services/auth';
+import CacheUtil from '@src/util/cache';
 
 describe('Beach forecast functional tests', () => {
   const defaultUser = {
@@ -25,6 +26,7 @@ describe('Beach forecast functional tests', () => {
     };
     await new Beach(defaultBeach).save();
     token = AuthService.generateToken(user.toJSON());
+    CacheUtil.clearAllCache();
   });
 
   it('should return a forecast with just a few times', async () => {
